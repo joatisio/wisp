@@ -1,15 +1,48 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+.idea
 
-# Test binary, built with `go test -c`
-*.test
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# Coverage
+lib-cov
+coverage
+.nyc_output
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Dependency directories
+node_modules
+
+# Cache
+.npm
+.eslintcache
+
+# IDE
+.vscode
+
+#OS
+.DS_Store
+
+# nodenv
+.nodenv-vars
+
+# Developer specific configuration files
+.env
+.tool-versions
+
+# Build
+dist
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+#Vendor
+vendor/
