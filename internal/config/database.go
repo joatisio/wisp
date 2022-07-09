@@ -6,4 +6,5 @@ type Database struct {
 	Host     string
 	DBName   string
 	Port     uint
+	Secure   bool
 }
