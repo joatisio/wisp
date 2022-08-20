@@ -7,23 +7,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type Service interface {
-	SetDB(db *gorm.DB)
-}
-
-type API interface {
-}
-
 type App struct {
 	Config   *config.Config
 	Database *gorm.DB
 	Logger   *zap.Logger
+	Server   *Server
 }
 
-func NewApp(c *config.Config, db *gorm.DB, logger *zap.Logger) *App {
+func NewApp(c *config.Config, db *gorm.DB, logger *zap.Logger, server *Server) *App {
 	return &App{
 		Config:   c,
 		Database: db,
 		Logger:   logger,
+		Server:   server,
 	}
 }

@@ -50,7 +50,7 @@ func Test_generateDsn(t *testing.T) {
 				Port:     5432,
 				Secure:   false,
 			},
-			want:      "host=127.0.0.1 user=root password=root dbname=joatis port=5432 sslmode=disable",
+			want:      "host=127.0.0.1 objects=root password=root dbname=joatis port=5432 sslmode=disable",
 			isInvalid: false,
 		},
 		{
@@ -62,7 +62,7 @@ func Test_generateDsn(t *testing.T) {
 				DBName:   "joatis",
 				Port:     5432,
 			},
-			want:      "host=127.0.0.2 user=root password=root dbname=joatis port=5432 sslmode=disable",
+			want:      "host=127.0.0.2 objects=root password=root dbname=joatis port=5432 sslmode=disable",
 			isInvalid: true,
 		},
 	}

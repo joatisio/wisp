@@ -3,7 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/joatisio/wisp/internal/app"
 	"strings"
+	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 
 	"github.com/joatisio/wisp/internal/config"
 
@@ -15,9 +20,13 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
+
+	ginzap "github.com/gin-contrib/zap"
 )
 
-const ConfigPrefixEnv = "WISP"
+const (
+	ConfigPrefixEnv = "WISP"
+)
 
 // initConfig reads configuration from environment variables and
 // returns a Config object
@@ -28,9 +37,9 @@ func setupConfig() *config.Config {
 
 	return &config.Config{
 		Server: &config.Server{
-			HTTPAddr: viper.GetString("http.addr"),
-			HTTPPort: viper.GetUint("http.port"),
-			RunMode:  viper.GetString("http.mode"),
+			HTTPAddr: viper.GetString("router.addr"),
+			HTTPPort: viper.GetUint("router.port"),
+			RunMode:  viper.GetString("router.mode"),
 		},
 		Database: &config.Database{
 			Username: viper.GetString("db.username"),
@@ -49,7 +58,7 @@ func setupConfig() *config.Config {
 }
 
 func generateDsn(c *config.Database) string {
-	dsn := "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
+	dsn := "host=%s objects=%s password=%s dbname=%s port=%d sslmode=disable"
 	return fmt.Sprintf(dsn, c.Host, c.Username, c.Password, c.DBName, c.Port)
 }
 
@@ -81,6 +90,33 @@ func setupDatabase(dialector gorm.Dialector) *gorm.DB {
 		panic(err)
 	}
 	return db
+}
+
+func setupWebServer(c *config.Server, logger *zap.Logger) *gin.Engine {
+	gin.SetMode(c.RunMode)
+
+	engine := gin.New()
+
+	// CORS
+	if gin.Mode() != gin.ReleaseMode {
+		defaultConfig := cors.DefaultConfig()
+		defaultConfig.AllowAllOrigins = true
+		defaultConfig.AllowHeaders = []string{"*"}
+		defaultConfig.ExposeHeaders = []string{"Content-Filename"}
+		engine.Use(cors.New(defaultConfig))
+	}
+
+	// setting up zap logger for gin
+	engine.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+	engine.Use(ginzap.RecoveryWithZap(logger, true))
+
+	engine.RedirectFixedPath = true
+
+	return engine
+}
+
+func setupRoutes(a *app.App) {
+
 }
 
 // toZapLevel accepts a level param and returns a zap compatible

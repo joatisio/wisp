@@ -46,3 +46,5 @@ dist
 
 #Vendor
 vendor/
+
+.history
