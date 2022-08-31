@@ -16,6 +16,7 @@ func (s *Service) Logout(req LogoutRequest) error {
 		return err
 	}
 
+	// block the token
 	if err := s.userTokenRepo.BlockById(req.UserID, tok.ID); err != nil {
 		s.logger.Error(
 			"cannot block token",

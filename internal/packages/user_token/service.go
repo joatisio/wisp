@@ -13,7 +13,7 @@ import (
 )
 
 type UserToken interface {
-	Create(t *models.Token) error
+	Create(uid models.ID, token models.Token) error
 	GetByUserId(uid models.ID) ([]*models.Token, error)
 	Delete(tokenId models.ID) error
 }
